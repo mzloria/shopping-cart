@@ -1,0 +1,161 @@
+/*
+ * TCSS 305 Autumn 2018
+ * Assignment 2
+ */
+
+package tests;
+
+
+import static org.junit.Assert.*;
+
+import java.math.BigDecimal;
+import model.Item;
+import model.ShoppingCart;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * This contains the tests for the Item class.
+ * 
+ * @author Michael Zachary Loria
+ * @version October 16 2018
+ */
+public class ItemTest
+{
+
+    /** The item that will be used in the tests. */
+    private Item myItem;
+    
+    /**
+     * This is a method to initialize the Item for each of the tests.
+     */
+    @Before
+    public void setUp()
+    {
+        myItem = new Item("Shoes", new BigDecimal("39.99"));
+    }
+
+    /**
+     * Test method for {@link model.Item#hashCode()}.
+     */
+    @Test
+    public void testHashCode()
+    {
+        //Equal objects should have equal hash code values
+        final Item itemOne = new Item("Shoes", new BigDecimal("39.99"));
+        assertEquals(itemOne.hashCode(), myItem.hashCode());
+    }
+
+    /**
+     * Test method for {@link model.Item#getName()}.
+     */
+    @Test
+    public void testGetName()
+    {
+        assertEquals("Shoes", myItem.getName());
+    }
+
+    /**
+     * Test method for {@link model.Item#getPrice()}.
+     */
+    @Test
+    public void testGetPrice()
+    {
+        assertEquals(new BigDecimal("39.99"), myItem.getPrice());
+    }
+
+    /**
+     * Test method for {@link model.Item#getBulkQuantity()}.
+     */
+    @Test
+    public void testGetBulkQuantity()
+    {
+        //Item Without Bulk Quantity
+        assertEquals(0, myItem.getBulkQuantity());
+        
+        //Item With Bulk Quantity
+        final Item itemTwo = new Item("4K Television", new BigDecimal("399.99"), 2, 
+                                      new BigDecimal("699.99"));
+        assertEquals(2, itemTwo.getBulkQuantity());
+    }
+
+    /**
+     * Test method for {@link model.Item#getBulkPrice()}.
+     */
+    @Test
+    public void testGetBulkPrice()
+    {
+        //Item Without Bulk Price
+        assertEquals(null, myItem.getBulkPrice());
+       
+        //Item With Bulk Price
+        final Item itemThree = new Item("Toy Car", new BigDecimal("19.99"), 4, 
+                                      new BigDecimal("59.99"));
+        assertEquals(new BigDecimal("59.99"), itemThree.getBulkPrice());
+    }
+
+    /**
+     * Test method for {@link model.Item#isBulk()}.
+     */
+    @Test
+    public void testIsBulk()
+    {
+        assertEquals(false, myItem.isBulk());
+    }
+
+    /**
+     * Test method for {@link model.Item#toString()}.
+     */
+    @Test
+    public void testToString()
+    {
+        //Item Without Bulk Pricing
+        assertEquals("Shoes, $39.99", myItem.toString());
+        
+        //Item With Bulk Pricing
+        final Item itemFour = new Item("Computer Mouse", new BigDecimal("12.99"), 3, 
+                                        new BigDecimal("29.99"));
+        assertEquals("Computer Mouse, $12.99 (3 for $29.99)", itemFour.toString());
+    }
+
+    /**
+     * Test method for {@link model.Item#equals(java.lang.Object)}.
+     */
+    @Test
+    public void testEqualsObject()
+    {
+        // reflexive property
+        assertEquals(myItem, myItem);
+
+        // return false if the parameter is null        
+        assertNotEquals(myItem, null);
+
+        // return false if the parameter is a different type
+        assertNotEquals(myItem, new ShoppingCart());
+
+        // symmetric property
+        final Item itemSix = new Item("Shoes", new BigDecimal("39.99"));
+        assertEquals(itemSix, myItem);
+        assertEquals(myItem, itemSix);
+
+        // Items with different names should not be considered equal
+        final Item itemSeven = new Item("Cars", new BigDecimal("39.99"));
+        assertFalse(myItem.equals(itemSeven));
+
+        // Items with different prices should not be considered equal
+        final Item itemEight = new Item("Shoes", new BigDecimal("49.99"));
+        assertFalse(myItem.equals(itemEight));
+        
+        // Items with different bulk quantities should not be considered equal
+        final Item itemNine = new Item("Shoes", new BigDecimal("39.99"), 3, 
+                                       new BigDecimal("69.99"));
+        final Item itemTen = new Item("Shoes", new BigDecimal("39.99"), 2, 
+                                      new BigDecimal("69.99"));
+        assertFalse(itemNine.equals(itemTen));
+        
+        // Items with different bulk prices should not be considered equal
+        final Item itemEleven = new Item("Shoes", new BigDecimal("39.99"), 2, 
+                                         new BigDecimal("65.99"));
+        assertFalse(itemTen.equals(itemEleven));
+    }
+}

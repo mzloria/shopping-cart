@@ -1,0 +1,42 @@
+/*
+ * TCSS 305 Autumn 2018
+ * Assignment 2
+ */
+
+package model;
+
+public final class ItemOrder
+{
+    
+    //Private or static or both? final?
+    private Item myItem;
+    private int myQuantity;
+    
+    public ItemOrder(final Item theItem, final int theQuantity)
+    {
+        myItem = theItem;
+        myQuantity = theQuantity;
+    }
+
+    public Item getItem()
+    {
+        return myItem;
+    }
+
+    public int getQuantity()
+    {
+        return myQuantity;
+    }
+
+    @Override
+    public String toString()
+    {
+        final StringBuilder builder = new StringBuilder(128);
+        builder.append(myItem.toString());
+        builder.append(", Quantity: ");
+        builder.append(myQuantity);
+        
+        return builder.toString();
+    }
+
+}

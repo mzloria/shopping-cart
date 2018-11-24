@@ -1,0 +1,160 @@
+/*
+ * TCSS 305 Autumn 2018
+ * Assignment 2
+ */
+
+package tests;
+
+
+import static org.junit.Assert.*;
+
+import java.math.BigDecimal;
+import java.util.Objects;
+import model.Item;
+import org.junit.Before;
+import org.junit.Test;
+
+/**
+ * This contains the tests for the Item class.
+ * 
+ * @author Michael Zachary Loria
+ * @version October 16 2018
+ */
+
+public class ItemTest
+{
+
+    /** The item that will be used in the tests. */
+    private Item myItem;
+    
+    /**
+     * @throws java.lang.Exception
+     */
+    @Before
+    public void setUp()
+    {
+        myItem = new Item("Shoes", new BigDecimal("39.99"));
+    }
+
+    /**
+     * Test method for {@link model.Item#hashCode()}.
+     */
+    @Test
+    public void testHashCode()
+    {
+        assertEquals(Objects.hash("Shoes", new BigDecimal("39.99"), 0, null), 
+                     myItem.hashCode());
+    }
+
+    /**
+     * Test method for {@link model.Item#getName()}.
+     */
+    @Test
+    public void testGetName()
+    {
+        assertEquals("Shoes", myItem.getName());
+    }
+
+    /**
+     * Test method for {@link model.Item#getPrice()}.
+     */
+    @Test
+    public void testGetPrice()
+    {
+        assertEquals(new BigDecimal("39.99"), myItem.getPrice());
+    }
+
+    /**
+     * Test method for {@link model.Item#getBulkQuantity()}.
+     */
+    @Test
+    public void testGetBulkQuantity()
+    {
+        assertEquals(0, myItem.getBulkQuantity());
+        
+        final Item itemOne = new Item("4K Television", new BigDecimal("399.99"), 2, 
+                                      new BigDecimal("699.99"));
+        assertEquals(2, itemOne.getBulkQuantity());
+    }
+
+    /**
+     * Test method for {@link model.Item#getBulkPrice()}.
+     */
+    @Test
+    public void testGetBulkPrice()
+    {
+        assertEquals(null, myItem.getBulkPrice());
+       
+        final Item itemTwo = new Item("Toy Car", new BigDecimal("19.99"), 4, 
+                                      new BigDecimal("59.99"));
+        assertEquals(new BigDecimal("59.99"), itemTwo.getBulkPrice());
+    }
+
+    /**
+     * Test method for {@link model.Item#isBulk()}.
+     */
+    @Test
+    public void testIsBulk()
+    {
+        assertEquals(false, myItem.isBulk());
+    }
+
+    /**
+     * Test method for {@link model.Item#toString()}.
+     */
+    @Test
+    public void testToString()
+    {
+        assertEquals("Shoes, $39.99", myItem.toString());
+    }
+    
+    /**
+     * Test method for {@link model.Item#toString()}.
+     */
+    @Test
+    public void testToStringWithBulk()
+    {
+        final Item itemThree = new Item("Computer Mouse", new BigDecimal("12.99"), 3, 
+                                      new BigDecimal("29.99"));
+        assertEquals("Computer Mouse, $12.99 (3 for $29.99)", itemThree.toString());
+    }
+
+    /**
+     * Test method for {@link model.Item#equals(java.lang.Object)}.
+     */
+    @Test
+    public void testEqualsObject()
+    {
+        final Item itemFour = new Item("Shoes", new BigDecimal("39.99"));
+        assertEquals(true, itemFour.equals(myItem));
+    }
+
+    /**
+     * Test method for {@link java.lang.Object#equals(java.lang.Object)}.
+     */
+    @Test
+    public void testEqualsObject1()
+    {
+        final Item itemFive = new Item("Shoes", new BigDecimal("39.99"), 32, 
+                                       new BigDecimal("49.99"));
+        assertEquals(false, itemFive.equals(myItem));
+        
+        final Item itemSix = new Item("Shoes", new BigDecimal("49.99"), 32, 
+                                       new BigDecimal("49.99"));
+        assertEquals(false, itemFive.equals(itemSix));
+        
+        final Item itemSeven = new Item("Cars", new BigDecimal("49.99"), 23, 
+                                      new BigDecimal("49.99"));
+        assertEquals(false, itemSeven.equals(itemSix));
+       
+        final Item itemEight = new Item("Cars", new BigDecimal("49.99"), 34, 
+                                       new BigDecimal("49.99"));
+        assertEquals(false, itemEight.equals(itemSeven));
+        
+        final Item itemNine = null;
+        assertEquals(false, itemEight.equals(itemNine));
+        
+        final Object objectTen = new Object();
+        assertEquals(false, itemEight.equals(objectTen));
+    }
+}

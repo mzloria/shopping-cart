@@ -1,0 +1,71 @@
+/*
+ * TCSS 305 Autumn 2018
+ * Assignment 2
+ */
+
+package model;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Map;
+import java.util.HashMap;
+
+public class ShoppingCart
+{
+    //static/and/or final/and or /private
+    private Map<Item, Integer> myMap;
+    private BigDecimal myTotal;
+    private boolean myMembership;
+
+    public ShoppingCart()
+    {
+        myMap = new HashMap<Item, Integer>();
+    }
+
+    public void add(final ItemOrder theOrder)
+    {
+        myMap.put(theOrder.getItem(), theOrder.getQuantity());
+    }
+
+    public void setMembership(final boolean theMembership)
+    {
+        myMembership = theMembership;
+    }
+
+    public BigDecimal calculateTotal()
+    {
+        myTotal = new BigDecimal(0.00);
+        for(Item i : myMap.keySet())
+        {
+            if(i.isBulk())
+            {
+                BigDecimal numberOfBulk = new BigDecimal(myMap.get(i)/i.getBulkQuantity());
+                myTotal = myTotal.add(numberOfBulk.multiply(i.getBulkPrice()));
+                BigDecimal numberOfRegular = new BigDecimal(myMap.get(i) % i.getBulkQuantity());
+                myTotal = myTotal.add(numberOfRegular.multiply(i.getPrice()));
+            }
+            else
+            {
+                myTotal = myTotal.add(i.getPrice().multiply(new BigDecimal(myMap.get(i))));
+            }
+        }
+        if(myMembership)
+        {
+            myTotal = myTotal.multiply(new BigDecimal(0.85));
+        }
+
+        return myTotal.setScale(2, RoundingMode.HALF_EVEN);
+    }
+
+    public void clear()
+    {
+        myMap.clear();
+    }
+
+    @Override
+    public String toString()
+    {
+        return myMap.toString();
+    }
+
+}
